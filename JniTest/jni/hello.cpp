@@ -393,12 +393,25 @@ JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_callClassInitMethod(JNIEnv* 
         return ;
     }
 
+    // 异常处理,jni中出现异常时函数会继续执行后面的代码,不会立刻退出
+    //jthrowable thr = env->ExceptionOccurred();
+    if(env->ExceptionCheck()) {  // if(thr), 是否有异常
+        env->ExceptionDescribe(); // 打印异常堆栈信息
+        env->ExceptionClear();  // 清理异常堆栈信息
+        jclass cs = env->FindClass("java/lang/Exception");
+        if (NULL == cs) {
+            return ;
+        }
+        env->ThrowNew(cs, "new object fail");  // 抛出一个新异常
+    }
+
     // .搜索父类class
     jclass clz = env->FindClass("com/learn/jnitest/Animal");
     if (NULL == subclz) {
         printf("find class fail\n");
         return ;
     }
+
     // .获取父类run methodid
     jmethodID mid = env->GetMethodID(clz, "run", "(Ljava/lang/String;)V");
     if (NULL == mid) {
