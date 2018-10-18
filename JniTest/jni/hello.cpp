@@ -276,7 +276,7 @@ JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_accessStaticField(JNIEnv *en
     }
 
     // .在class中搜索field id
-    jfieldID fid = env->GetStaticFieldID(clz, "name", "Ljava/lang/String");
+    jfieldID fid = env->GetStaticFieldID(clz, "name", "Ljava/lang/String;");
     if (NULL == fid) {
         printf("get static field id fail\n");
         return ;
@@ -326,7 +326,7 @@ JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_accessInstanceField(JNIEnv *
     clz = env->GetObjectClass(obj);
 
     // .在class中搜索field id
-    jfieldID fid = env->GetFieldID(clz, "str", "Ljava/lang/String");
+    jfieldID fid = env->GetFieldID(clz, "str", "Ljava/lang/String;");
     if (NULL == fid) {
         printf("get field fail \n");
         return ;
@@ -361,6 +361,59 @@ JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_accessInstanceField(JNIEnv *
     }
 
     env->DeleteLocalRef(clz);
+    return ;
+}
+
+JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_callClassInitMethod(JNIEnv* env, jclass cls) 
+{
+    // .搜索class
+    jclass subclz = env->FindClass("com/learn/jnitest/Dog");
+    if (NULL == subclz) {
+        printf("find subclass fail\n");
+        return ;
+    }
+    // .获取methodid
+    jmethodID submid = env->GetMethodID(subclz, "<init>", "(Ljava/lang/String;)V");
+    if (NULL == submid) {
+        printf("get init method id fail\n");
+        return ;
+    }
+    // .构造参数
+    jstring str = env->NewStringUTF("Balance");
+    if (NULL == str) {
+        printf("new string fail\n");
+        return ;
+    } 
+    printf("get method id and str ok\n");
+
+    // .创建子类实例
+    jobject subobj = env->NewObject(subclz, submid, str);
+    if (NULL == subobj) {
+        printf("new sub object fail\n");
+        return ;
+    }
+
+    // .搜索父类class
+    jclass clz = env->FindClass("com/learn/jnitest/Animal");
+    if (NULL == subclz) {
+        printf("find class fail\n");
+        return ;
+    }
+    // .获取父类run methodid
+    jmethodID mid = env->GetMethodID(clz, "run", "(Ljava/lang/String;)V");
+    if (NULL == mid) {
+        printf("get run method id fail\n");
+        return ;
+    }
+    // .调用父类run
+    env->CallNonvirtualVoidMethod(subobj, clz, mid, str);
+
+    // .释放局部引用
+    env->DeleteLocalRef(subclz);
+    env->DeleteLocalRef(subobj);
+    env->DeleteLocalRef(str);
+    env->DeleteLocalRef(clz);
+
     return ;
 }
 

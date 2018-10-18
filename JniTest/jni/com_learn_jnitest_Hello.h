@@ -103,6 +103,14 @@ JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_accessStaticField
 JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_accessInstanceField
   (JNIEnv *, jclass, jobject);
 
+/*
+ * Class:     com_learn_jnitest_Hello
+ * Method:    callClassInitMethod
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_learn_jnitest_Hello_callClassInitMethod
+  (JNIEnv *, jclass);
+
 #ifdef __cplusplus
 }
 #endif

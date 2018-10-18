@@ -4,7 +4,34 @@ import java.lang.System;
 class MyClass {}
 
 public class Hello {
-    
+/*
+    // 用于测试的父类和子类不能是内部类
+    class Animal {
+        protected String name = "Dog";
+        public Animal(String str) {
+            name = str;
+            System.out.println("Animal init");
+        }
+
+        public void run(String str) {
+            System.out.println("Animal: " + name);
+        }
+    }
+
+    class Dog extends Animal {
+        protected String name = "super";
+        public Dog (String str) {
+            super(str);
+            name = "super" + str;
+            System.out.println("Dog init");
+        }
+
+        @Override
+        public void run(String str) {
+            System.out.println("Dog: " + name);
+        }
+    }
+*/ 
     static {
         String path = System.getProperty("java.library.path");
         System.out.println("library path: " + path);
@@ -80,6 +107,9 @@ public class Hello {
         System.out.format("- %s\n", Hello.name);
         System.out.format("Len: %d - %s\n", h.len, h.str);
 
+        // call init method
+        callClassInitMethod();
+
         System.out.println("end main");
     }
 
@@ -105,6 +135,8 @@ public class Hello {
     public static native void accessStaticField();
 
     public static native void accessInstanceField(Hello h);
+
+    public static native void callClassInitMethod();
 }
 
 
